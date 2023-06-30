@@ -1,47 +1,55 @@
-import { useDispatch, useSelector} from 'react-redux';
+import React, { lazy } from 'react';
+import { Navigate, Route, Routes} from "react-router-dom";
+import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
-import { ContactForm } from 'components/ContactForm/ContactForm';
-import { ContactList } from 'components/ContactList/ContactList';
-import { Filter } from 'components/Filter/Filter';
-import { selectError, selectIsLoading } from 'redux/selectors';
-import { fetchContacts } from 'redux/operations';
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { Container } from './App.styled';
+import { fetchCurrentUser } from 'redux/auth/auth-operations';
+import { selectIsRefreshing } from 'redux/auth/auth-selectors';
+import  Layout  from 'components/Layout';
+import  PrivateRouter  from 'components/PrivateRoute';
+import  RestrictedRoute  from 'components/RestrictedRoute';
 
 
+const Home = lazy(() => import('pages/Home'));
+const Contacts = lazy(() => import('pages/Contacts'));
+const Login = lazy(() => import('pages/Login'));
+const Register = lazy(() => import('pages/Register'));
 
-export const App = () => {  
+export const App = () => {
   const dispatch = useDispatch();
-  const isLoading = useSelector(selectIsLoading);
-  const error = useSelector(selectError);
-
-  useEffect(() => {
-    dispatch(fetchContacts());
-  }, [dispatch]);
+   const isRefreshing = useSelector(selectIsRefreshing);
  
-  return (
-    <Container>
-      <h1>Phonebook</h1>
-      <ContactForm />
-      
-      <h2>Contacts</h2>
-      <Filter />
-      {isLoading && !error && <h2>Request in progress</h2>}
-      <ContactList /> 
-        <ToastContainer
-          position="top-center"
-          autoClose={3000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          theme="colored"
-/>
-    </Container>
-  );
+  useEffect(() => {
+    dispatch(fetchCurrentUser());
+  }, [dispatch]);
+
+
+
+  return ( isRefreshing ? (
+    <b>Refreshing user</b>) :(
+    
+      <Routes>
+        <Route path='/' element={<Layout />}>
+          <Route index element={<Home />} />
+
+          <Route
+            path='/register'
+            element={<RestrictedRoute redirectTo='/login' component={<Register />} />} />
+          
+          <Route
+            path='/login'
+            element={<RestrictedRoute redirectTo='/contacts' component={<Login />} />} />
+          
+          <Route
+            path='/contacts'
+            element={<PrivateRouter redirectTo='/login' component={<Contacts />} />} />
+          
+          <Route path='*' element={<Navigate to='/' />} />
+        </Route>
+      </Routes>
+    )
+  )
+
 };
+
+
 
