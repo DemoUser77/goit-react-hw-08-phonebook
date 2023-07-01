@@ -21,10 +21,10 @@ export const ContactForm = () => {
         if (contacts.some(({ name }) => name.toLowerCase() === formName.toLowerCase())) {
             return toast.warn(`${formName} is already in contacts`);
         }
-        if (contacts.some(({ phone }) => phone === formNumber)) {
+        if (contacts.some(({ number }) => number === formNumber)) {
             return toast.warn(`${formNumber} is already in contacts`);
         }
-      dispatch(addContact({ name: formName, phone: formNumber }));
+      dispatch(addContact({ name: formName, number: formNumber }));
       console.log();
         toast.success(`${formName} is added to the contacts!`);
         form.reset();

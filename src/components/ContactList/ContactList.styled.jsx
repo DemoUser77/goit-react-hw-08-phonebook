@@ -16,10 +16,11 @@ export const Item = styled.li`
 
 export const Name = styled.p`
     font-weight: 600;
+    color: #082b6d;
 `;
 
-export const Button = styled.button`
-    margin-left:auto;
-    height: 20px;
-   cursor: pointer;
-`;
+// export const Button = styled.button`
+//     margin-left:auto;
+//     height: 20px;
+//    cursor: pointer;
+// `;

@@ -13,10 +13,20 @@ import {Box,
 } from '@mui/material';
 import { BottomText, StyledLink } from "./RegisterForm.styled";
 import { toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { useState } from 'react';
+import { VisibilityOffSharp, VisibilitySharp } from '@mui/icons-material';
 
  const RegisterForm = () => {
     const dispatch = useDispatch();
 
+   const [showPassword, setShowPassword] = useState(false);
+  const handleClickShowPassword = () => setShowPassword(show => !show);
+  const handleMouseDownPassword = event => {
+    event.preventDefault();
+  };
+   
     const handleSubmit = event => {
         event.preventDefault();
         const form = event.currentTarget;
@@ -30,12 +40,12 @@ import { toast } from 'react-toastify';
         )
             .unwrap()
             .then(() => {
-               toast.success('Welcome to phonebook!');;
+               toast.success("Welcome to phonebook!");;
             })
             .catch(() => {
-                toast.error("Sorry,something wrong");
+                toast.error("Incorrect login or password");
         })
-        form.reset();
+        // form.reset();
     };
 
      return (
@@ -92,18 +102,19 @@ import { toast } from 'react-toastify';
                 required
                 id="standard-adornment-password"
                 title="Your Password must include a minimum of 15 characters"
+                type={showPassword ? 'text' : 'password'}
                 endAdornment={
                   <InputAdornment position="end">
                     <IconButton
-                      // aria-label="toggle password visibility"
-                    //   onClick={handleClickShowPassword}
-                    //   onMouseDown={handleMouseDownPassword}
+                       aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword}
+                      onMouseDown={handleMouseDownPassword}
                     >
-                      {/* {showPassword ? (
+                      {showPassword ? (
                         <VisibilityOffSharp sx={{ color: '#0f7ec9' }} />
                       ) : (
                         <VisibilitySharp />
-                      )} */}
+                      )} 
                     </IconButton>
                   </InputAdornment>
                 }
@@ -117,8 +128,22 @@ import { toast } from 'react-toastify';
         <BottomText>
           Already have an account? <StyledLink to="/login">LogIn</StyledLink>
         </BottomText>
-      </Box>
-    </Container>
+         </Box>
+           <ToastContainer
+          position="top-center"
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="colored"
+/>
+       </Container>
+
+        
   );
 };
      

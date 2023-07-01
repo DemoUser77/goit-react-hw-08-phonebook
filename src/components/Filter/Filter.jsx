@@ -27,7 +27,7 @@ export const Filter = () => {
         sx={{
           width: '420px',
           textAlign: 'center',
-          mt: '50px',
+          mt: '10px',
           p: '10px',
           border: '2px solid #17046b',
           bgcolor: '#ebf1f1',
